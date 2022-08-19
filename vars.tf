@@ -1,10 +1,11 @@
 #variable "AWS_ACCESS_KEY" {}
 #variable "AWS_SECRET_KEY" {}
 variable "AWS_REGION" {
+	type		= string
 	default		= "eu-west-2"
 	}
 variable "AMIS" {
-	type 	"map"
+	type 	= map
 	default 	= { 
 		eu-west-1 = "ami-0e34bbddc66def5ac"
 		eu-west-2 = "ami-0e34bbddc66def5ac"
