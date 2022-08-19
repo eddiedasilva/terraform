@@ -14,6 +14,21 @@ variable "AMIS" {
 }
 
 
+variable "PATH_TO_PRIVATE_KEY" {
+  #default = "eddie"
+  default = "/root/.ssh/id_rsa"
+}
+
+variable "PATH_TO_PUBLIC_KEY" {
+  #default = "eddie.pem"
+  default = "/root/.ssh/id_rsa.pub"
+}
+
+variable "USERNAME" {
+  default = "ec2-user"
+}
+
+
 
 
 

@@ -1,77 +1,42 @@
-resource "aws_instance" "vm-test" {
-  	#ami           		= "ami-0e34bbddc66def5ac"
-  	#ami           		= "var.lookup(var.AWS_REGION)"
-  	ami           		= "${lookup(var.AMIS, var.AWS_REGION)}"
-  	#ami           		= lookup(var.AMIS, var.AWS_REGION, "") # last parameter is the default value
-  	instance_type         	= "t2.micro"
-  	key_name		= "eddie"
+#resource "aws_instance" "vm-test" {
 
-
-
-
-#   	 provisioner "remote-exec" {
-#		connection {
-#                user    = "ec2-user"
-#                private_key = "${file("~/.ssh/eddie.pem")}"
-#
-#
-#               inline          = [
-#                       "chmod +x /opt/script.sh",
-#                       "/opt/script.sh"
-#               	]	
-#      		}
-	}
-
-
-
-
-}	
-
-#	provisioner "file" {
-#                source		= "~/.ssh/eddie.pem"
-#                destination	= "/home/ec2-user/.ssh/eddie.pem"
-#		connection {
-#		host        	= coalesce(self.public_ip, self.private_ip)
-#		user	= "ec2-user"
-#		private_key = "${file("~/.ssh/eddie.pem")}"
-
-#
-#		}
-#     
-#	}
-#
-
-
-
-
-
-
-
-##################################### works #######################
-# resource "aws_instance" "vm-d" {
-#        ami                     = "${lookup(var.AMIS, var.AWS_REGION)}"
-#        instance_type           = "t2.micro"
-#        key_name                = "eddie"
-#
-#        provisioner "file" {
-#                source          = "script.sh"
-#                destination     = "/opt/script.sh"
-#        }
-#	provisioner "remote-exec" {
-#		inline 		= [
-#			"chmod +x /opt/script.sh",
-#			"/opt/script.sh"
-#		]
-#	}
+#       #ami                    = "ami-0e34bbddc66def5ac"
+#       #ami                    = "var.lookup(var.AWS_REGION)"
+#       ami                     = "${lookup(var.AMIS, var.AWS_REGION)}"
+#       #ami                    = lookup(var.AMIS, var.AWS_REGION, "") # last parameter is the default value
+#       instance_type           = "t2.micro"
+#       key_name                = "eddie"
+###########################################################
+#resource "aws_key_pair" "eddie" {
+#  key_name   = "eddie"
+#  #public_key = file(var./root/.ssh/id_rsa.pub)
+#  public_key = file("/root/.ssh/id_rsa.pub")
 #}
-  
-#resource "aws_security_group" "test-terrafor" {
-#  #name = "${random_pet.name.id}-sg"
-#  name = "test-security"
-#  ingress {
-#    from_port   = 22
-#    to_port     = 22
-#    protocol    = "tcp"
-#    cidr_blocks = ["0.0.0.0/0"]
-#  }
-#}
+
+resource "aws_instance" "VM2" {
+  ami           = var.AMIS[var.AWS_REGION]
+  instance_type = "t2.micro"
+  #key_name      = aws_key_pair.eddie.key_name
+  key_name      = "eddie"
+
+  provisioner "file" {
+    source      = "script.sh"
+    destination = "/tmp/script.sh"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/script.sh",
+      #"sudo sed -i -e 's/\r$//' /tmp/script.sh",  # Remove the spurious CR characters.
+      "sudo /tmp/script.sh",
+    ]
+  }
+  connection {
+    host        = coalesce(self.public_ip, self.private_ip)
+    type        = "ssh"
+    user        = "ec2-user"
+    #private_key = file(var.var./root/.ssh/id_rsa.pub)
+    #private_key = file("/root/.ssh/id_rsa.pub")
+    private_key = file("/root/.ssh/id_rsa")
+  }
+}
+
