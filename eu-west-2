@@ -1,9 +1,14 @@
 {
   "version": 4,
   "terraform_version": "1.2.7",
-  "serial": 63,
-  "lineage": "6bc28634-fdfc-3e78-cec6-7e76bd7f2c2d",
-  "outputs": {},
+  "serial": 0,
+  "lineage": "e6e4e941-0606-5b21-d17e-0edc4037d33d",
+  "outputs": {
+    "ip": {
+      "value": "3.10.164.82",
+      "type": "string"
+    }
+  },
   "resources": [
     {
       "mode": "managed",
@@ -15,7 +20,7 @@
           "schema_version": 1,
           "attributes": {
             "ami": "ami-0e34bbddc66def5ac",
-            "arn": "arn:aws:ec2:eu-west-2:667912133116:instance/i-07f4ed293e584db23",
+            "arn": "arn:aws:ec2:eu-west-2:667912133116:instance/i-0a5e870b09e1b0ada",
             "associate_public_ip_address": true,
             "availability_zone": "eu-west-2c",
             "capacity_reservation_specification": [
@@ -45,7 +50,7 @@
             "hibernation": false,
             "host_id": null,
             "iam_instance_profile": "",
-            "id": "i-07f4ed293e584db23",
+            "id": "i-0a5e870b09e1b0ada",
             "instance_initiated_shutdown_behavior": "stop",
             "instance_state": "running",
             "instance_type": "t2.micro",
@@ -72,8 +77,8 @@
             "password_data": "",
             "placement_group": "",
             "placement_partition_number": null,
-            "primary_network_interface_id": "eni-0cd13df23fc5004c5",
-            "private_dns": "ip-172-31-9-227.eu-west-2.compute.internal",
+            "primary_network_interface_id": "eni-06323fb38211310b1",
+            "private_dns": "ip-172-31-10-21.eu-west-2.compute.internal",
             "private_dns_name_options": [
               {
                 "enable_resource_name_dns_a_record": false,
@@ -81,9 +86,9 @@
                 "hostname_type": "ip-name"
               }
             ],
-            "private_ip": "172.31.9.227",
-            "public_dns": "ec2-3-8-91-22.eu-west-2.compute.amazonaws.com",
-            "public_ip": "3.8.91.22",
+            "private_ip": "172.31.10.21",
+            "public_dns": "ec2-3-10-164-82.eu-west-2.compute.amazonaws.com",
+            "public_ip": "3.10.164.82",
             "root_block_device": [
               {
                 "delete_on_termination": true,
@@ -93,7 +98,7 @@
                 "kms_key_id": "",
                 "tags": {},
                 "throughput": 0,
-                "volume_id": "vol-050d69a8609f32209",
+                "volume_id": "vol-0055825c9d1dbdf91",
                 "volume_size": 8,
                 "volume_type": "gp2"
               }
@@ -138,7 +143,7 @@
             "id": "eddie",
             "key_name": "eddie",
             "key_name_prefix": "",
-            "key_pair_id": "key-0c425c6ddc00edf33",
+            "key_pair_id": "key-07f4acc34971dc482",
             "key_type": "rsa",
             "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDYvRFukIhbayAVAlbGsZFkvKJym+LMnz5DAkub9U1amzxD/gbx3ATAOV7NWLQ27BZFHnGrr2oKzFRGnvvJQxirqiOPoHtGHgLrYpRFonZHOrK5OlJdzfx0Hsx3H2Gyz9nn/WBI1ctc01jZHnpfWoJFTEIRAJsNkHsTmE3WJkdJTbKTDxqzVZjWEJl2QSGAC4VxC6Vuu/bAn5RGbOk3I7Ctf4alXHyp54LC/siyHWx3cXpYFfQBWhcvXeTbErS5smXpzLuhesX66wSryzOuWLvs3ro5/6vKKAXjsBN7ZjP7J+DiveiDBHPFCSi/9tft/KifTSMcy2s1Tn+lHaj6SFjiRMhBpJL0co0onmUeLcNfv7Xr5V6lQ3Y96gRgjLDkoTwBQVXszq5I81NO1O67ymRQZvh8ENY+dlPlF7dRj8DLac5Y2I23bKFY2X/GSFYPC3XvDeEw0Y40nwGJmOqr6ZXzSH5n0bhQmsOBCjfQX2+fHIdAN5SomI+nIAkJae4QegE= esilva@gammatelecom.com@esilva.vdi.intra.gammatelecom.com",
             "tags": null,
