@@ -7,44 +7,80 @@
 #       instance_type           = "t2.micro"
 #       key_name                = "eddie"
 ###########################################################
-resource "aws_key_pair" "eddie" {
-	key_name   			= "eddie"
-  	#public_key 			= file("/root/.ssh/id_rsa.pub")
-  	public_key 			= "${file("${var.PATH_TO_PUBLIC_KEY}")}"
-}
+#resource "aws_key_pair" "eddie" {
+#  key_name = "eddie"
+#  #public_key 			= file("/root/.ssh/id_rsa.pub")
+#  public_key = file("${var.PUBLIC_KEY}")
+#}
+
+
 
 resource "aws_instance" "VM3" {
-  	ami           			= var.AMIS[var.AWS_REGION]
-	instance_type 			= "t2.micro"
-	#key_name      			= "eddie"
-	key_name      			= aws_key_pair.eddie.key_name
+  ami           			= var.AMIS[var.AWS_REGION]
+  instance_type 			= "t2.micro"
+  #key_name      			= "eddie"
+  key_name = aws_key_pair.eddie.key_name # in provider's file
+  # increase root file system size, default is 8GB
+  #root_block_device {
+  #  volume_size					= 16
+  #  volume_type					= "gp2"
+  #  delete_on_termination			= true
+  #}
+  vpc_security_group_ids = ["${aws_security_group.permit-ssh-https.id}"]
+  
+  # install openVPN with userdata
+ #user_data					= "sudo amazon-linux-extra install epel\nsudo yum install openvpn"
+ user_data					= "${da.template_cloudinit_config.cloudinit-example.rendered}"
 
-	provisioner "file" {
-	source      			= "script.sh"
-    	destination 			= "/tmp/script.sh"
-  	}	
-  	provisioner "remote-exec" {
-    		inline = [
-      			"chmod +x /tmp/script.sh",
-      			#"sudo sed -i -e 's/\r$//' /tmp/script.sh",  # Remove the spurious CR characters.
-      			"sudo /tmp/script.sh",
-    		]
-  	}	
-  	connection {
-    	host        			= coalesce(self.public_ip, self.private_ip)
-    	type        			= "ssh"
-    	#user        			= "ec2-user"
-    	#private_key 			= file("/root/.ssh/id_rsa")
-    	user        			= "${var.USERNAME}"
-    	private_key 			= "${file("${var.PATH_TO_PRIVATE_KEY}")}"
-  	}
-	provisioner "local-exec" {
-		command = "echo ${aws_instance.VM3.private_ip}	>> private_ips.txt"
-	}
+  provisioner "file" {
+    source      			= "scripts/ngnix.sh"
+    destination = 			"/tmp/ngnix.sh"
+  }
+ connection {
+    host 				= coalesce(self.public_ip, self.private_ip)
+    type 				= "ssh"
+    #user                               = "ec2-user"
+    #private_key                        = file("/root/.ssh/id_rsa")
+    user        			= var.USERNAME
+    private_key 			= file("${var.PRIVATE_KEY}")
+  }
+
+  provisioner "remote-exec" {
+    inline 				= [
+      "chmod +x /tmp/script.sh",
+      #"sudo sed -i -e 's/\r$//' /tmp/script.sh",  # Remove the spurious CR characters.
+      "sudo /tmp/script.sh"
+    ]
+  }
+  #connection {
+  #  host = coalesce(self.public_ip, self.private_ip)
+  #  type = "ssh"
+  #  #user        			= "ec2-user"
+  #  #private_key 			= file("/root/.ssh/id_rsa")
+  #  user        = var.USERNAME
+  #  private_key = file("${var.PRIVATE_KEY}")
+  #}
+  provisioner "local-exec" {
+    command 				= "echo ${aws_instance.VM3.private_ip}	>> private_ips.txt"
+  }
+}
+resource "aws_ebs_volume" "ebs-volume-1" {
+  availability_zone 			= "eu-west-2b" 
+  size					= 20
+  type					= "gp2" # General Purpose storage, can also be standard or io 1 or st1
+  #tag {
+  #  Name					=  "extra volume data"
+  #}
+}
+resource "aws_volume_attachment" "ebs-volume-1-attachment" {
+  #device_name 				= "/dev/xvdh"
+  device_name 				= "${var.INSTANCE_DEVICE_NAME}"
+  volume_id 				= "${aws_ebs_volume.ebs-volume-1.id}"
+  instance_id				= "${aws_instance.VM3.id}"
 }
 
 output "ip" {
-	value 				= "${aws_instance.VM3.public_ip}"
-	
+  value = aws_instance.VM3.public_ip
+
 }
 

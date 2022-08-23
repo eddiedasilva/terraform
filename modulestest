@@ -1,0 +1,10 @@
+module "consul" {
+	#source			= "git@github.com:wardviaene/terraform-consul-module.git"
+	source			= "git@github.com:eddiedasilva/terraform-consul-module.git"
+	key_name		= "${aws_key_pair.eddie.key_name}"
+	key_path		= "${var.PRIVATE_KEY}"
+}
+
+output "consul_output" {
+	value			= "${module.sonsul.server_dress}"
+}

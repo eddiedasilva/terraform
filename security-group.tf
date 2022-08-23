@@ -26,9 +26,10 @@
 #  #ipv6_cidr_blocks  = [aws_vpc.SG-test.ipv6_cidr_block]
 # security_group_id = "sg-072f09c805639d3f5"
 #}
-
-resource "aws_security_group" "demo-sg" {
-  name = "sec-grp"
+############################### creates but no connection
+resource "aws_security_group" "permit-ssh-https" {
+  #pvc_id = "${aws_vpc_id.main.id}"
+  name = "permit-ssh-https"
   description = "Allow HTTP and SSH traffic via Terraform"
 
   ingress {
@@ -36,11 +37,13 @@ resource "aws_security_group" "demo-sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+
   }
 
   ingress {
     from_port   = 22
     to_port     = 22
+    #protocol    = "-1"
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
