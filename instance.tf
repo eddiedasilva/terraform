@@ -30,7 +30,8 @@ resource "aws_instance" "VM3" {
   
   # install openVPN with userdata
  #user_data					= "sudo amazon-linux-extra install epel\nsudo yum install openvpn"
- user_data					= "${da.template_cloudinit_config.cloudinit-example.rendered}"
+ #user_data					= "${data.template_cloudinit_config.cloudinit-example.rendered}"
+ user_data 					= data.cloudinit_config.cloudinit-example.rendered
 
   provisioner "file" {
     source      			= "scripts/ngnix.sh"
@@ -47,9 +48,9 @@ resource "aws_instance" "VM3" {
 
   provisioner "remote-exec" {
     inline 				= [
-      "chmod +x /tmp/script.sh",
-      #"sudo sed -i -e 's/\r$//' /tmp/script.sh",  # Remove the spurious CR characters.
-      "sudo /tmp/script.sh"
+      "chmod +x /tmp/ngnix.sh",
+      #"sudo sed -i -e 's/\r$//' /tmp/ngnix.sh",  # Remove the spurious CR characters.
+      "sudo /tmp/ngnix.sh"
     ]
   }
   #connection {
@@ -68,7 +69,7 @@ resource "aws_ebs_volume" "ebs-volume-1" {
   availability_zone 			= "eu-west-2b" 
   size					= 20
   type					= "gp2" # General Purpose storage, can also be standard or io 1 or st1
-  #tag {
+  #tags {
   #  Name					=  "extra volume data"
   #}
 }
