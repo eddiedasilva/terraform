@@ -32,6 +32,12 @@ variable "INSTANCE_DEVICE_NAME" {
   default = "/dev/xvdh"
 }
 
+variable "DOMAIN_NAME" {
+	default = "kc-cloud.com"
+}
+
+variable "RDS_PASSWORD" {
+}
 
 
 
