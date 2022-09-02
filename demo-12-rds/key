@@ -1,0 +1,5 @@
+resource "aws_key_pair" "eddie" {
+  key_name   = "eddie"
+  public_key = file(var.PUBLIC_KEY)
+}
+
