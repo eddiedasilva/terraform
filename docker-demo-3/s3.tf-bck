@@ -1,0 +1,8 @@
+resource "aws_s3_bucket" "terraform-state-eddie" {
+  bucket = "terraform-state-eddie"
+
+  tags = {
+    Name = "Terraform state eddie"
+  }
+}
+
